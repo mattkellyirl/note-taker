@@ -1,7 +1,14 @@
 const express = require('express');
 const path = require('path');
+const notes = require('./routes/notes');
 const port = process.env.PORT || 3001;
 const app = express();
+
+// Middleware to parse JSON from incoming requests
+app.use(express.json());
+
+// Redirect /api requests to notes
+app.use('/api', notes);
 
 // Middleware to serve static files from the 'public' directory - will serve index.html on load by default
 app.use(express.static('public'));
