@@ -1,7 +1,7 @@
-const express = require('express');
 const notes = require('express').Router();
 const fs = require('fs');
-const jsonPath = './db/db.json';
+const jsonPath = ('./db/db.json');
+const newSequentialId = require('../utils/id.js');
 
 // Display Notes
 notes.get("/notes", (req, res) => {
@@ -9,7 +9,7 @@ notes.get("/notes", (req, res) => {
         if (err) {
             console.error('Error Reading Notes', err);
             return res.status(500).json({ error: 'Internal Server Error' });
-        }
+        };
 
         const notes = JSON.parse(data);
         res.json(notes);
@@ -22,13 +22,13 @@ notes.post('/notes', (req,res) => {
         if (postErr) {
             console.error('Error Posting Note', postErr);
             return res.status(500).json({ error: 'Internal Server Error' });
-        }
+        };
 
         const notes = JSON.parse(data);
         
         // Creating a new note
         const newNote = {
-            id: '1',
+            id: newSequentialId(notes),
             title: req.body.title,
             text: req.body.text
         };
@@ -40,7 +40,7 @@ notes.post('/notes', (req,res) => {
             if (writeErr) {
                 console.error('Error Writing Note', writeErr);
                 return res.status(500).json({ error: 'Internal Server Error' });
-            }
+            };
 
             // Respond with new note
             res.json(newNote);
