@@ -48,4 +48,30 @@ notes.post('/notes', (req,res) => {
     });
 });
 
+// Delete Existing Note
+notes.delete('/notes/:id', (req, res) => {
+    fs.readFile(jsonPath, 'utf-8', (deleteErr, data) => {
+        if(deleteErr) {
+            console.error('Error Reading Note', deleteErr);
+            return res.status(500).json({error : 'Internal Server Error'});
+        };
+
+        const notes = JSON.parse(data);
+        const deleteId = Number(req.params.id);
+
+        const index = notes.findIndex(note => note.id === deleteId);
+
+        if(index !== -1) {
+            notes.splice(index, 1);
+
+            fs.writeFile(jsonPath, JSON.stringify(notes, null, 2), (deleteErr) => {
+                console.log('Note Deleted', deleteErr)
+                res.json({sucess : true})
+            })
+        } else {
+            res.status(404).json({error : 'Note Not Found'});
+        };
+    });
+});
+
 module.exports = notes;
