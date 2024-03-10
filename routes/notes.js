@@ -3,7 +3,7 @@ const fs = require('fs');
 const jsonPath = './db/db.json';
 const newSequentialId = require('../utils/id.js');
 
-// Display Notes
+// Display notes
 notes.get("/notes", (req, res) => {
     fs.readFile(jsonPath, 'utf-8', (err, data) => {
         if (err) {
@@ -16,7 +16,7 @@ notes.get("/notes", (req, res) => {
     });
 });
 
-// Post New Note
+// Post new note
 notes.post('/notes', (req,res) => {
     fs.readFile(jsonPath, 'utf-8', (err, data) => {
         if (err) {
@@ -48,7 +48,7 @@ notes.post('/notes', (req,res) => {
     });
 });
 
-// Delete Existing Note
+// Delete existing note
 notes.delete('/notes/:id', (req, res) => {
     fs.readFile(jsonPath, 'utf-8', (err, data) => {
         if (err) {

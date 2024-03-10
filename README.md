@@ -15,10 +15,22 @@ Keep track of your daily tasks with this note taking application built with Expr
 - [Questions](#questions)
 
 ## Installation Instructions
-To install this application, clone this repository to your local machine and install all relevant packages by executing "npm i". Please note, Node.js must be installed on your local machine for this application to run. 
+To install this application, clone this repository to your local machine and install all relevant packages by executing "npm install". Please note, Node.js must be installed on your local machine for this application to run. 
 
 ## Usage
-To use this application, visit the [link](https://github.com/mattkellyirl). To use this application on your local machine execute "node server.js" to start the application.
+To use this application, visit the Heroku [link](https://note-taker-matt-kelly-3d734cb4b9bf.herokuapp.com/). To use this application on your local machine execute "node server.js" or "npm start" to start the application via your terminal. 
+
+Once the application is running, click the "Get Started" button.
+
+<img src ="./assets/screenshots/scrn1.png"></img>
+
+Here you will find a list of premade notes. Click the delete button on each of the notes to start from scratch. 
+
+<img src ="./assets/screenshots/scrn2.png"></img>
+
+Enter your own note title and body, and click the "Save Note" button to save your note. Voila! You have successfully entered your own note. Happy note taking!
+
+<img src ="./assets/screenshots/scrn3.png"></img>
 
 ## Contribution Guidelines
 This project was developed by Matt Kelly.
