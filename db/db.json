@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "Eat Breakfast",
+    "text": "It's the most important meal of the day, remember!"
+  },
+  {
+    "id": 2,
+    "title": "Finish Coding Assignment",
+    "text": "Don't forget to submit it by 11:59pm!"
+  }
+]

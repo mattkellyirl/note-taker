@@ -1,48 +1,48 @@
 const notes = require('express').Router();
 const fs = require('fs');
-const jsonPath = ('./db/db.json');
+const jsonPath = './db/db.json';
 const newSequentialId = require('../utils/id.js');
 
 // Display Notes
 notes.get("/notes", (req, res) => {
     fs.readFile(jsonPath, 'utf-8', (err, data) => {
         if (err) {
-            console.error('Error Reading Notes', err);
-            return res.status(500).json({ error: 'Internal Server Error' });
+            console.error('Error reading notes', err);
+            return res.status(500).json({ message: 'Request to read notes failed' });
         };
 
-        const notes = JSON.parse(data);
-        res.json(notes);
+        const notesArray = JSON.parse(data);
+        res.json(notesArray);
     });
 });
 
-// Post a New Note
+// Post New Note
 notes.post('/notes', (req,res) => {
-    fs.readFile(jsonPath, 'utf-8', (postErr, data) => {
-        if (postErr) {
-            console.error('Error Posting Note', postErr);
-            return res.status(500).json({ error: 'Internal Server Error' });
+    fs.readFile(jsonPath, 'utf-8', (err, data) => {
+        if (err) {
+            console.error('Error reading notes', err);
+            return res.status(500).json({ message: 'Request to read notes failed' });
         };
 
-        const notes = JSON.parse(data);
-        
+        const notesArray = JSON.parse(data);
+
         // Creating a new note
         const newNote = {
-            id: newSequentialId(notes),
+            id: newSequentialId(notesArray),
             title: req.body.title,
             text: req.body.text
         };
 
-        notes.push(newNote);
+        notesArray.push(newNote);
 
-        // Writing the updated db.json file
-        fs.writeFile(jsonPath, JSON.stringify(notes, null, 2), 'utf-8', (writeErr) => {
-            if (writeErr) {
-                console.error('Error Writing Note', writeErr);
-                return res.status(500).json({ error: 'Internal Server Error' });
+        // Write updated db.json file
+        fs.writeFile(jsonPath, JSON.stringify(notesArray, null, 2), 'utf-8', (writeFileErr) => {
+            if (writeFileErr) {
+                console.error('Unable to post note', writeFileErr);
+                return res.status(500).json({ message: 'Request to post note failed' });
             };
 
-            // Respond with new note
+            // Respond with a new note
             res.json(newNote);
         });
     });
@@ -50,26 +50,34 @@ notes.post('/notes', (req,res) => {
 
 // Delete Existing Note
 notes.delete('/notes/:id', (req, res) => {
-    fs.readFile(jsonPath, 'utf-8', (deleteErr, data) => {
-        if(deleteErr) {
-            console.error('Error Reading Note', deleteErr);
-            return res.status(500).json({error : 'Internal Server Error'});
+    fs.readFile(jsonPath, 'utf-8', (err, data) => {
+        if (err) {
+            console.error('Error reading notes', err);
+            return res.status(500).json({ message: 'Request to read notes failed' });
         };
 
-        const notes = JSON.parse(data);
-        const deleteId = Number(req.params.id);
+        const notesArray = JSON.parse(data);
+        const deleteId = Number(req.params.id); // Define note id to be deleted as a number
+        const index = notesArray.findIndex(note => note.id === deleteId); // Use findIndex to find note id to be deleted
 
-        const index = notes.findIndex(note => note.id === deleteId);
-
+        // If note id to be deleted exists (findIndex returns -1 if id not found)
         if(index !== -1) {
-            notes.splice(index, 1);
+            // Remove the note from db.json
+            notesArray.splice(index, 1);
 
-            fs.writeFile(jsonPath, JSON.stringify(notes, null, 2), (deleteErr) => {
-                console.log('Note Deleted', deleteErr)
-                res.json({sucess : true})
-            })
+            // Rewrite the notes with the requested note removed from db.json
+            fs.writeFile(jsonPath, JSON.stringify(notesArray, null, 2), (writeFileErr) => {
+                if (writeFileErr) {
+                    console.error('Unable to delete note', writeFileErr)
+                    return res.status(500).json({ error: 'Request to delete note failed' });
+                } else {
+                    console.log('Deleted note #' + deleteId + ' successfully');
+                    return res.status(200).json({ message: 'Note deleted successfully' });
+                };
+            });
         } else {
-            res.status(404).json({error : 'Note Not Found'});
+            // Returns if note is not found
+            return res.status(404).json({ error: 'Note not found', details: 'Note with the specified ID was not found' });
         };
     });
 });

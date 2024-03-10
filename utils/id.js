@@ -8,7 +8,6 @@ const newSequentialId = (notes) => {
 
     // If notes is not empty, find the max number of notes saved and set id to max number of notes +1
     const maxId = Math.max(...notes.map(note => parseInt (note.id, 10)));
-
     return maxId + 1;
 };
 
